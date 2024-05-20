@@ -1,4 +1,3 @@
-# Etapa 1: Construção da aplicação
 FROM node:18-alpine AS builder
 
 # Define o diretório de trabalho
@@ -16,11 +15,8 @@ COPY . .
 # Executa o build da aplicação
 RUN npm run build
 
-# Serve a aplicação
+# Etapa 2: Servindo a aplicação com Express
 FROM node:18-alpine
-
-# Instala uma ferramenta simples para servir conteúdo estático
-RUN npm install -g serve
 
 # Define o diretório de trabalho
 WORKDIR /app
@@ -28,8 +24,8 @@ WORKDIR /app
 # Copia os arquivos construídos da etapa anterior
 COPY --from=builder /app/build /app
 
-# Expoe a porta 5432
+# Expoe a porta 5173
 EXPOSE 5173
 
-# Comando para rodar a aplicação usando "serve"
-CMD ["serve", "-s", "."]
+# Comando para rodar a aplicação com Express
+CMD ["npm", "run", "dev"]
