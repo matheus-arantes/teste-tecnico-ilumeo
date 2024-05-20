@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  frontend:
+    build:
+      context: ./frontend # diretório do frontend
+      dockerfile: Dockerfile # arquivo Dockerfile do frontend
+    ports:
+      - "5173:5173" # mapeia a porta 5173 do host para a porta 5173 do contêiner
+    depends_on:
+      - backend # garante que o serviço backend seja iniciado antes do frontend
+
+  backend:
+    build:
+      context: ./backend # diretório do backend
+      dockerfile: Dockerfile # arquivo Dockerfile do backend
+    ports:
+      - "3000:3000" # mapeia a porta 3000 do host para a porta 3000 do contêiner
+    depends_on:
+      - db # garante que o serviço db (banco de dados) seja iniciado antes do backend
+
+  db:
+    image: postgres:alpine # imagem do PostgreSQL Alpine
+    ports:
+      - "5432:5432" # mapeia a porta 5432 do host para a porta 5432 do contêiner
+    environment:
+      POSTGRES_USER: postgres # usuário do banco de dados
+      POSTGRES_PASSWORD: 1234 # senha do banco de dados
